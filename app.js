@@ -10,12 +10,17 @@ http.listen(3000, function(){
 
 
 app.get('/', function(req , res){
-    res.send('chat');
+    res.sendFile(__dirname + '/index.html');
 });
 
 
 
 io.on('connection', function(socket){
     console.log('a user connection');
+
+
+    socket.on('disconnect' , function(){
+        console.log('disconnect user');
+    });
 });
 
