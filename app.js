@@ -7,6 +7,9 @@ var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/NodeCourse');
 
+var User = require('./model/user');
+
+
 http.listen(3000, function(){
     console.log('Server is running on port 3000');
 });
@@ -21,12 +24,27 @@ app.get('/', function(req , res){
 io.on('connection', function(socket){
     console.log('a user connection');
     
-    socket.on('new user' , function(data){
-        console.log(data);
+    socket.on('new user' , function(data , callback){
+        new User({
+            name : data.name,
+            email : data.email
+        }).save(function(err , user){
+            if (!user){
+                callback(false);
+                return;
+            }
+
+            callback(true);
+            
+            socket.username = user.name;
+            socket._id = user._id;
+        });
     });
 
     socket.on('disconnect' , function(){
-        console.log('disconnect user');
+        User.findByIdAndRemove(socket._id , function(err){
+            if(err) throw err;
+        });
     });
 });
 
