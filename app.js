@@ -38,6 +38,8 @@ io.on('connection', function(socket){
             
             socket.username = user.name;
             socket._id = user._id;
+
+            io.emit('new user', { username : socket.username});
         });
     });
 
@@ -45,6 +47,7 @@ io.on('connection', function(socket){
         User.findByIdAndRemove(socket._id , function(err){
             if(err) throw err;
         });
+        io.emit('disconnect' , {name : socket.username});
     });
 });
 

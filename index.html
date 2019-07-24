@@ -91,7 +91,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
-        
+        var userId = '';
+        var messageBox= $('#panelChat .panel-body')
 
         $('#panelUsername').submit(function(e){
             e.preventDefault();
@@ -109,7 +110,21 @@
                     alert('this user is already');
                 }
             });
+
+            
+        });
+
+        socket.on('new user' , function(data){
+            messageBox.append('<div class="clearfix"><blockquote class="join">' + data.username + ' in join Chat </blockquote></div>');
+        });
+
+        socket.on('disconnect', function(data){
+            if(data.name != undefined){
+                messageBox.append('<div class="clearfix"><blockquote class="leave">' + data.username + ' in leave Chat </blockquote></div>');
+            }
+
         })
+
 
     </script>
 </body>
