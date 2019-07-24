@@ -91,6 +91,16 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
+        $('#panelUsername').submit(function(e){
+            e.preventDefault();
+            var username ={
+                name : $('#username').val(),
+                email : $('#email').val()
+            }
+
+            socket.emit('new user' , username);
+        })
+
     </script>
 </body>
 </html>

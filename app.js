@@ -20,7 +20,10 @@ app.get('/', function(req , res){
 
 io.on('connection', function(socket){
     console.log('a user connection');
-
+    
+    socket.on('new user' , function(data){
+        console.log(data);
+    });
 
     socket.on('disconnect' , function(){
         console.log('disconnect user');
