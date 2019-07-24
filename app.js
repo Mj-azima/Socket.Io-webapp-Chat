@@ -2,7 +2,10 @@ var express = require('express');
 var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
+var mongoose = require('mongoose');
 
+
+mongoose.connect('mongodb://localhost/NodeCourse');
 
 http.listen(3000, function(){
     console.log('Server is running on port 3000');
