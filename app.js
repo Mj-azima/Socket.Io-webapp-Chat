@@ -43,6 +43,13 @@ io.on('connection', function(socket){
         });
     });
 
+    socket.on('new message' , function(data){
+        io.emit('new message' , {message : data , user :{
+            id : socket.id,
+            name : socket.username
+        }});
+    });
+
     socket.on('disconnect' , function(){
         User.findByIdAndRemove(socket._id , function(err){
             if(err) throw err;

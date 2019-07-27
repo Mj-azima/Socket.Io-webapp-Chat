@@ -114,16 +114,35 @@
             
         });
 
+        $('#sendMessage').click(function(){
+            socket.emit('new message', $('#message').val());
+        });
+
         socket.on('new user' , function(data){
             messageBox.append('<div class="clearfix"><blockquote class="join">' + data.username + ' in join Chat </blockquote></div>');
         });
 
         socket.on('disconnect', function(data){
-            if(data.name != undefined){
-                messageBox.append('<div class="clearfix"><blockquote class="leave">' + data.username + ' in leave Chat </blockquote></div>');
+            if(data.username === undefined) return;
+            
+            messageBox.append('<div class="clearfix"><blockquote class="leave">' + data.username + ' in leave Chat </blockquote></div>');
+            
+
+        });
+
+        socket.on('connect', function(){
+            userId = socket.id;
+        })
+
+        socket.on('new message' , function(data){
+            if(userId == data.user.id){
+                messageBox.append('<div class="clearfix"><blockquote class="me pull-right">' + data.message + '<b> : ' + data.user.name + ' </b></blockquote></div>');
+                return;
             }
 
-        })
+            messageBox.append('<div class="clearfix"><blockquote class="you pull-left"><b>' + data.user.name + ' : </b> ' + data.message + '</blockquote></div>');
+
+        });
 
 
     </script>
